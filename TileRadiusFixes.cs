@@ -36,58 +36,100 @@ namespace ExtendedReach
         }
     }
 
-    [HarmonyPatch(typeof(Utility), "canGrabSomethingFromHere")]
+    [HarmonyPatch]
     public class Utility_canGrabSomethingFromHere
     {
+        internal static MethodInfo TargetMethod()
+        {
+            return AccessTools.Method(getTypeSDV("Utility"), "canGrabSomethingFromHere");
+        }
+
         internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, MethodBase original, IEnumerable<CodeInstruction> insns)
         {
             Log.trace("Patching Utility.canGrabSomethingFromHere");
             return TileRadiusFix.IncreaseRadiusChecks(gen, original, insns);
         }
     }
-    [HarmonyPatch(typeof(Utility), "checkForCharacterInteractionAtTile")]
+    [HarmonyPatch]
     public class Utility_checkForCharacterInteractionAtTile
     {
+        internal static MethodInfo TargetMethod()
+        {
+            return AccessTools.Method(getTypeSDV("Utility"), "checkForCharacterInteractionAtTile");
+        }
+
         internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, MethodBase original, IEnumerable<CodeInstruction> insns)
         {
             Log.trace("Patching Utility.checkForCharacterInteractionAtTile");
             return TileRadiusFix.IncreaseRadiusChecks(gen, original, insns);
         }
     }
-    [HarmonyPatch(typeof(Game1), "pressActionButton")]
+    [HarmonyPatch]
     public class Game1_pressActionButton
     {
+        internal static MethodInfo TargetMethod()
+        {
+            return AccessTools.Method(getTypeSDV("Game1"), "pressActionButton");
+        }
+
         internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, MethodBase original, IEnumerable<CodeInstruction> insns)
         {
             Log.trace("Patching Game1.pressActionButton");
             return TileRadiusFix.IncreaseRadiusChecks(gen, original, insns);
         }
     }
-    [HarmonyPatch(typeof(Game1), "pressUseToolButton")]
+    [HarmonyPatch]
     public class Game1_pressUseToolButton
     {
+        internal static MethodInfo TargetMethod()
+        {
+            return AccessTools.Method(getTypeSDV("Game1"), "pressUseToolButton");
+        }
+
         internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, MethodBase original, IEnumerable<CodeInstruction> insns)
         {
             Log.trace("Patching Game1.pressUseToolButton");
             return TileRadiusFix.IncreaseRadiusChecks(gen, original, insns);
         }
     }
-    [HarmonyPatch(typeof(Game1), "tryToCheckAt")]
+    [HarmonyPatch]
     public class Game1_tryToCheckAt
     {
+        internal static MethodInfo TargetMethod()
+        {
+            return AccessTools.Method(getTypeSDV("Game1"), "tryToCheckAt");
+        }
+
         internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, MethodBase original, IEnumerable<CodeInstruction> insns)
         {
             Log.trace("Patching Game1.tryToCheckAt");
             return TileRadiusFix.IncreaseRadiusChecks(gen, original, insns);
         }
     }
-    [HarmonyPatch(typeof(GameLocation), "isActionableTile")]
+    [HarmonyPatch]
     public class GameLocation_isActionableTile
     {
+        internal static MethodInfo TargetMethod()
+        {
+            return AccessTools.Method(getTypeSDV("GameLocation"), "isActionableTile");
+        }
+
         internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, MethodBase original, IEnumerable<CodeInstruction> insns)
         {
             Log.trace("Patching GameLocation.isActionableTile");
             return TileRadiusFix.IncreaseRadiusChecks(gen, original, insns);
         }
+    }
+
+    public static Type getTypeSDV(string type)
+    {
+        string prefix = "StardewValley.";
+        Type defaultSDV = Type.GetType(prefix + type + ", Stardew Valley");
+
+        if (defaultSDV != null)
+            return defaultSDV;
+        else
+            return Type.GetType(prefix + type + ", StardewValley");
+
     }
 }
